@@ -71,7 +71,7 @@ public class Labb1Company {
 
         while (true) {
             switch (choice) {
-                case 1: // 处理所有者相关的操作
+                case 1: // 处理所有者相关
                     owner = subChoice(owner, "ägare");
                     break;
                 case 2: // 处理员工相关的操作
