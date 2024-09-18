@@ -7,15 +7,16 @@ public class Labb1Company {
     private static final String[] menuChoices = {"1. Ägare (visa alla, lägg till, ändra, ta bort)",
             "2. Anställd (visa alla, lägg till, ändra, ta bort)",
             "3. Skriv ut ammanställning", "0. Avsluta programmet"};
+    private static  int[] employees = new int[]{};
 
 
     public static void main(String[] args) {
 
-// Ange restaurangens namn
+        // Ange restaurangens namn
         String restaurangens_name;
         while (true) {
             System.out.println("Ange restaurangens namn (minst 10 tecken)");
-            restaurangens_name = sc.next();
+            restaurangens_name = sc.nextLine();
             if (restaurangens_name.length() <= 10) {
                 System.out.println("För kort namn.Prova igen");
                 continue;
@@ -23,53 +24,54 @@ public class Labb1Company {
             break;
         }
         int numberOfOwner;
-        // dela ägarandel till ägare
+        // avgör hur många ägare som ska finnas
         while (true) {
             System.out.println("Antal ägare?");
-            numberOfOwner = sc.nextInt();
-            if (numberOfOwner <= 0) {
+            numberOfOwner = Integer.parseInt(sc.nextLine());
+            if (!(numberOfOwner > 0)) {
                 System.out.println("Det måste finnas minst en ägare");
                 continue;
             }
             break;
         }
+        // skapar ägare array
         int[] owner = new int[numberOfOwner];
+        // skapar index
+        int index = 0;
+        //skapar totalOwnerPercentage
+        int totalOwnerPercentage = 0;
+        // skriva in ownership
         if (owner.length == 1) {
             owner[0] = 100;
             System.out.println("ägare 1 ägarandel 100");
         } else {
-            for (int i = 0; i < owner.length - 1; ) {
-                System.out.println("ange ägare" + (i + 1) + "ägarandel");
+            for (int i = index; index < owner.length - 1; ) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
+                System.out.println("ange ägare" + (index + 1) + "ägarandel");
                 int ownerPercentage = Integer.parseInt(sc.nextLine());
-                if (ownerPercentage <= 0) {
+                if (!(ownerPercentage > 0)) {
                     System.out.println("en ägare måste äga något...");
                     continue;
                 }
-                owner[i] = ownerPercentage;
-                i++;
+                owner[index] = ownerPercentage; // tilldeal ownership
+                totalOwnerPercentage += ownerPercentage; // räknar total ownership
+                index++;
             }
-            int count = 0;
-            for (int j : owner) {
-                count += j;
-            }
-            owner[numberOfOwner - 1] = 100 - count;
+            owner[index] = 100 - totalOwnerPercentage; // räknar den sista ownership
         }
         for (int j : owner) {
             System.out.println(j);
         }
 // employees
-        System.out.println("Välkommen till" + restaurangens_name + "!");
-        int[] employees = new int[]{};
+        System.out.println("Välkommen till " + restaurangens_name + "!");
+        while (true) {
         System.out.println("Välj ett av dessa ment-alternativ:");
         for (String menuChoice : menuChoices) {
             System.out.println(menuChoice);
         }
         System.out.println("Ange siffran för menyval");
-        sc.nextLine();
+
         int choice = Integer.parseInt(sc.nextLine());
 
-
-        while (true) {
             switch (choice) {
                 case 1: // 处理所有者相关
                     owner = subChoice(owner, "ägare");
@@ -102,7 +104,7 @@ public class Labb1Company {
         }
         while (true) {
             System.out.println("Ange siffran för vilken ägare du vill " + infoGiverOrTake);
-            int index = sc.nextInt();
+            int index = Integer.parseInt(sc.nextLine()) ;
             if (index < 0 || index > array.length) {
                 System.out.println("Felaktigt val. Prova igen");
                 continue;
@@ -112,7 +114,7 @@ public class Labb1Company {
                 continue;
             }
             System.out.println("Hur många preocetenheter vill du " + giveOrTake + " ägare" + index + "?");
-            int ownership = sc.nextInt();
+            int ownership = Integer.parseInt(sc.nextLine());
             //判断 移动的股份 小于 要求的股份数
             if (ownership > wantedOwnership) {
                 System.out.println("du kan inte ta mer än " + wantedOwnership);
@@ -123,10 +125,7 @@ public class Labb1Company {
                 System.out.println("du kan endast ta 1-" + wantedOwnership + "procentenheter från ägare");
                 continue;
             }
-
             index--;
-
-
             if (giveOwnership) {
                 array[index] += ownership;
 
@@ -248,8 +247,6 @@ public class Labb1Company {
     }
 
     public static int[] change(int[] array, String elementParam) {
-
-
         int inputNumber = 0;
         Boolean giveAway = true;
         while (true) {
@@ -308,7 +305,6 @@ public class Labb1Company {
             tempArr[j++] = array[i]; // 将元素复制到新数组
         }
         tempArr = correctOwnership(tempArr, ownership, giveAway);
-
         for (int i = 0, j = 0; i < array.length; i++) {
             if (i != inputNumber) {
                 array[i] = tempArr[j];
