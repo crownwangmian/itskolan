@@ -2,13 +2,11 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Labb1Company {
-
     private static final Scanner sc = new Scanner(System.in);
     private static final String[] menuChoices = {"1. Ägare (visa alla, lägg till, ändra, ta bort)",
             "2. Anställd (visa alla, lägg till, ändra, ta bort)",
             "3. Skriv ut ammanställning", "0. Avsluta programmet"};
     private static int[] employees = new int[]{};
-
 
     public static void main(String[] args) {
 
@@ -45,7 +43,7 @@ public class Labb1Company {
             owner[0] = 100;
             System.out.println("ägare 1 ägarandel 100");
         } else {
-            for (int i = index; index < owner.length - 1; ) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
+            while (index < owner.length - 1) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
                 System.out.println("ange ägare" + (index + 1) + "ägarandel");
                 int ownerPercentage = Integer.parseInt(sc.nextLine());
                 if (!(ownerPercentage > 0)) {
@@ -91,7 +89,6 @@ public class Labb1Company {
         }
     }
 
-
     //更改股东股份
     public static int[] correctOwnership(int[] array, int wantedOwnership, Boolean giveOwnership) {
 
@@ -123,7 +120,7 @@ public class Labb1Company {
             }
             // 判断 如果是给出股份，给出的股份必须小于当前股份
             if (!giveOwnership && correctOwnership >= array[index - 1]) {
-                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1]-1) + "procentenheter från ägare");
+                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1] - 1) + "procentenheter från ägare");
                 continue;
             }
             index--;
@@ -141,7 +138,6 @@ public class Labb1Company {
             return array;
         }
     }
-
 
     public static int[] addNew(int[] array, String elementParam) {
         if (elementParam.equalsIgnoreCase("anställd")) {
@@ -162,6 +158,7 @@ public class Labb1Company {
             newArray[array.length] = salary;
             return newArray;
         }
+
         int ownership;
         while (true) {
             System.out.println("Ange ägarens ägarandel");
@@ -170,15 +167,14 @@ public class Labb1Company {
                 System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och imndre än 100%");
                 continue;
             }
-            array = correctOwnership(array, ownership, false);
+            correctOwnership(array, ownership, false);
             int[] newArray = Arrays.copyOf(array, array.length + 1);
             newArray[array.length] = ownership;
             return newArray;
         }
-
-
     }
 
+    // 主目录的打印功能
     public static void printSummary(int[] ownerArray, int[] employeesArray) {
         int totalOwnership = 0;
         for (int i = 0; i < ownerArray.length; i++) {
@@ -186,15 +182,12 @@ public class Labb1Company {
             System.out.println("Ägare" + (i + 1) + ": " + ownerArray[i] + "%");
         }
         System.out.println("Totalt ägarandel: " + totalOwnership + "%");
-
         int totalHourSalaries = 0;
         for (int i = 0; i < employeesArray.length; i++) {
             totalHourSalaries += employeesArray[i];
             System.out.println("Anställd" + (i + 1) + ": " + employeesArray[i] + " Kr/timme");
         }
         System.out.println("Totala timkostnad anställda: " + totalHourSalaries + " Kr/timme");
-
-
     }
 
     public static void printAll(int[] array, String element) {
@@ -219,7 +212,7 @@ public class Labb1Company {
             return array;
         }
         System.out.println("Vilken " + elementParam + " vill du ta bort?");
-        int inputNumber = 0;
+        int inputNumber;
         do {
             printAll(array, elementParam);
             System.out.println("Ange siffran på den " + elementParam + " du vill ta bort");
@@ -245,8 +238,8 @@ public class Labb1Company {
     }
 
     public static int[] change(int[] array, String elementParam) {
-        int inputNumber = 0;
-        Boolean giveAway = true;
+        int inputNumber;
+        boolean giveAway;
         while (true) {
             System.out.println("Vilken" + elementParam + "vill du ändra på");
             printAll(array, elementParam);
@@ -261,7 +254,7 @@ public class Labb1Company {
         }
 
         if (!elementParam.equalsIgnoreCase("ägare")) {
-            int salary = 0;
+            int salary;
             while (true) {
                 System.out.println("Ange den anställdes nya timlön");
                 salary = Integer.parseInt(sc.nextLine());
@@ -274,8 +267,7 @@ public class Labb1Company {
             }
 
         }
-
-        int ownership = 0;
+        int ownership;
         while (true) {
             System.out.println("Ange ägarens nys ägarandel > ");
             ownership = Integer.parseInt(sc.nextLine());
@@ -302,18 +294,16 @@ public class Labb1Company {
             }
             tempArr[j++] = array[i]; // 将元素复制到新数组
         }
-        tempArr = correctOwnership(tempArr, ownership, giveAway);
+        correctOwnership(tempArr, ownership, giveAway);
         for (int i = 0, j = 0; i < array.length; i++) {
-            if (i != inputNumber) {
-                array[i] = tempArr[j];
-                j++;
+            if (i == inputNumber) {
+                continue;
             }
             array[i] = tempArr[j];
-
+            j++;
         }
         return array;
     }
-
     public static int[] subChoice(int[] arrayParam, String elementParam) {
         while (true) {
             // 打印菜单选项
@@ -349,7 +339,6 @@ public class Labb1Company {
             }
         }
     }
-
 }
 
 
