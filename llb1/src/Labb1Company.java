@@ -7,7 +7,7 @@ public class Labb1Company {
     private static final String[] menuChoices = {"1. Ägare (visa alla, lägg till, ändra, ta bort)",
             "2. Anställd (visa alla, lägg till, ändra, ta bort)",
             "3. Skriv ut ammanställning", "0. Avsluta programmet"};
-    private static  int[] employees = new int[]{};
+    private static int[] employees = new int[]{};
 
 
     public static void main(String[] args) {
@@ -64,13 +64,13 @@ public class Labb1Company {
 // employees
         System.out.println("Välkommen till " + restaurangens_name + "!");
         while (true) {
-        System.out.println("Välj ett av dessa ment-alternativ:");
-        for (String menuChoice : menuChoices) {
-            System.out.println(menuChoice);
-        }
-        System.out.println("Ange siffran för menyval");
+            System.out.println("Välj ett av dessa ment-alternativ:");
+            for (String menuChoice : menuChoices) {
+                System.out.println(menuChoice);
+            }
+            System.out.println("Ange siffran för menyval");
 
-        int choice = Integer.parseInt(sc.nextLine());
+            int choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
                 case 1: // 处理所有者相关
@@ -98,45 +98,43 @@ public class Labb1Company {
         String giveOrTake = giveOwnership ? "fördelas ut" : "tas fram";
         String infoGiverOrTake = giveOwnership ? "ge till" : "ta ifrån";
         System.out.println("Det är " + wantedOwnership + "procentenheter som behöver" + giveOrTake + ".");
-        System.out.println(giveOrTake.equals("fördelas ut") ? "vilken ägare vill du ge ägarandelar till ?" : "vilken ägare vill du ta ägarandelar av ? ");
+        System.out.println(giveOwnership ? "vilken ägare vill du ge ägarandelar till ?" : "vilken ägare vill du ta ägarandelar av ? ");
         for (int i = 0; i < array.length; i++) {//show every owner ownership
             System.out.println("ägare" + (i + 1) + ":" + array[i] + "%");
         }
+        // tilldela ownership till ägare
         while (true) {
             System.out.println("Ange siffran för vilken ägare du vill " + infoGiverOrTake);
-            int index = Integer.parseInt(sc.nextLine()) ;
-            if (index < 0 || index > array.length) {
+            int index = Integer.parseInt(sc.nextLine());
+            if (!(index > 0 && index <= array.length)) { // index giltighetverifiering
                 System.out.println("Felaktigt val. Prova igen");
                 continue;
             }
-            if ((array[index - 1] == 1) && (!giveOrTake.equals("fördelas ut"))) {
+            if ((array[index - 1] == 1) && (!giveOwnership)) {
                 System.out.println("Ägare" + index + " har bara 1% kvar. Du kan inte ta bort det sista ägarandelar ");
                 continue;
             }
-            System.out.println("Hur många preocetenheter vill du " + giveOrTake + " ägare" + index + "?");
-            int ownership = Integer.parseInt(sc.nextLine());
-            //判断 移动的股份 小于 要求的股份数
-            if (ownership > wantedOwnership) {
-                System.out.println("du kan inte ta mer än " + wantedOwnership);
+            System.out.println("Hur många preocetenheter vill du " + giveOrTake + " ägare " + index + "?");
+            int correctOwnership = Integer.parseInt(sc.nextLine());
+            //判断 移动的股份 小于 要求的股份数 并且 移动的股份大于1
+            if (correctOwnership > wantedOwnership && correctOwnership < 1) {
+                System.out.println("du kan inte ta mer än " + wantedOwnership + "och preocetenheter måste störe än noll");
                 continue;
             }
-            // 判断 移动的股份大于0
-            if (!(ownership > 0)) {
-                System.out.println("du kan endast ta 1-" + wantedOwnership + "procentenheter från ägare");
+            // 判断 如果是给出股份，给出的股份必须小于当前股份
+            if (!giveOwnership && correctOwnership >= array[index - 1]) {
+                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1]-1) + "procentenheter från ägare");
                 continue;
             }
             index--;
             if (giveOwnership) {
-                array[index] += ownership;
-
+                array[index] += correctOwnership;
             } else {
-                array[index] -= ownership;
+                array[index] -= correctOwnership;
             }
-
-            wantedOwnership -= ownership;
-
+            wantedOwnership -= correctOwnership;
             if (wantedOwnership != 0) {
-                System.out.println("Det är " + wantedOwnership + "procentenheter som behöver" + giveOrTake + ".");
+                System.out.println("Det är " + wantedOwnership + " procentenheter som behöver " + giveOrTake + ".");
                 continue;
             }
             System.out.println(Arrays.toString(array));
