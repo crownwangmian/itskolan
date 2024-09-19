@@ -1,11 +1,30 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Labb1Company {
+/**
+ * @author Mian Wang
+ * @version 4.1
+ * @Versionförändringar 1.Koden är logiskt korrekt och fungerar som förväntat.
+ * 2.Färg och format har lagts till.
+ * @Nästa versionsförbättringar:
+ * Lägga till funktioner, såsom automatisk beräkning av vinst.
+ * Lägga till try-catch-block.
+ * Använda samlingar för att göra hanteringen mer bekväm.
+ * Använda objektorienterad programmering.
+ * Förbättra metodanvändningen för att öka programmets effektivitet.
+ * @since 2024-09-19
+ */
+
+class Labb1Company {
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
     private static final Scanner sc = new Scanner(System.in);
-    private static final String[] menuChoices = {"1. Ägare (visa alla, lägg till, ändra, ta bort)",
+    private static final String[] menuChoices = {ANSI_PURPLE + "1. Ägare (visa alla, lägg till, ändra, ta bort)",
             "2. Anställd (visa alla, lägg till, ändra, ta bort)",
-            "3. Skriv ut ammanställning", "0. Avsluta programmet"};
+            "3. Skriv ut ammanställning", "0. Avsluta programmet" + ANSI_RESET};
     private static int[] employees = new int[]{};
 
     public static void main(String[] args) {
@@ -13,10 +32,10 @@ public class Labb1Company {
         // Ange restaurangens namn
         String restaurangens_name;
         while (true) {
-            System.out.println("Ange restaurangens namn (minst 10 tecken)");
+            System.out.println(ANSI_YELLOW + "Ange restaurangens namn (minst 10 tecken)" + ANSI_RESET);
             restaurangens_name = sc.nextLine();
             if (restaurangens_name.length() <= 10) {
-                System.out.println("För kort namn.Prova igen");
+                System.out.println(ANSI_RED + "För kort namn.Prova igen" + ANSI_RESET);
                 continue;
             }
             break;
@@ -27,7 +46,7 @@ public class Labb1Company {
             System.out.println("Antal ägare?");
             numberOfOwner = Integer.parseInt(sc.nextLine());
             if (!(numberOfOwner > 0)) {
-                System.out.println("Det måste finnas minst en ägare");
+                System.out.println(ANSI_RED + "Det måste finnas minst en ägare" + ANSI_RESET);
                 continue;
             }
             break;
@@ -41,10 +60,10 @@ public class Labb1Company {
         // skriva in ownership
         if (owner.length == 1) {
             owner[0] = 100;
-            System.out.println("ägare 1 ägarandel 100");
+            System.out.println(ANSI_RED + "ägare 1 ägarandel 100" + ANSI_RESET);
         } else {
             while (index < owner.length - 1) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
-                System.out.println("ange ägare" + (index + 1) + "ägarandel");
+                System.out.println("ange ägare" + (index + 1) + " ägarandel");
                 int ownerPercentage = Integer.parseInt(sc.nextLine());
                 if (!(ownerPercentage > 0)) {
                     System.out.println("en ägare måste äga något...");
@@ -56,32 +75,36 @@ public class Labb1Company {
             }
             owner[index] = 100 - totalOwnerPercentage; // räknar den sista ownership
         }
-        for (int j : owner) {
-            System.out.println(j);
-        }
+        System.out.println("=======");
+        printAll(owner, "ägare");
+        System.out.println("=======");
 // employees
-        System.out.println("Välkommen till " + restaurangens_name + "!");
+        System.out.println(ANSI_RED + "Välkommen till " + restaurangens_name + "!" + ANSI_RESET);
+
         while (true) {
-            System.out.println("Välj ett av dessa ment-alternativ:");
+            System.out.println(ANSI_GREEN + "Välj ett av dessa ment-alternativ:" + ANSI_RESET);
             for (String menuChoice : menuChoices) {
                 System.out.println(menuChoice);
             }
+            System.out.println("================================================================");
             System.out.println("Ange siffran för menyval");
 
             int choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
-                case 1: // 处理所有者相关
+                case 1: // hantera ägare
                     owner = subChoice(owner, "ägare");
                     break;
-                case 2: // 处理员工相关的操作
+                case 2: // hantera anställd
                     employees = subChoice(employees, "anställd");
                     break;
-                case 3: // 打印摘要
+                case 3: // skriv ut sammanställning
+                    System.out.println("===============");
                     printSummary(owner, employees);
+                    System.out.println("===============");
                     break;
-                case 0: // 退出程序
-                    System.out.println("Avslutar programmet.");
+                case 0: // avsluta programmet
+                    egg();
                     System.exit(0);
                 default:
                     System.out.println("Ogiltigt val. Försök igen.");
@@ -89,7 +112,7 @@ public class Labb1Company {
         }
     }
 
-    //更改股东股份
+    //förändring ägare
     public static int[] correctOwnership(int[] array, int wantedOwnership, Boolean giveOwnership) {
 
         String giveOrTake = giveOwnership ? "fördelas ut" : "tas fram";
@@ -108,22 +131,25 @@ public class Labb1Company {
                 continue;
             }
             if ((array[index - 1] == 1) && (!giveOwnership)) {
-                System.out.println("Ägare" + index + " har bara 1% kvar. Du kan inte ta bort det sista ägarandelar ");
+                System.out.println(ANSI_RED + "Ägare" + index + " har bara 1% kvar. Du kan inte ta bort det sista ägarandelar " + ANSI_RESET);
                 continue;
             }
             System.out.println("Hur många preocetenheter vill du " + giveOrTake + " ägare " + index + "?");
             int correctOwnership = Integer.parseInt(sc.nextLine());
-            //判断 移动的股份 小于 要求的股份数 并且 移动的股份大于1
-            if (correctOwnership > wantedOwnership && correctOwnership < 1) {
-                System.out.println("du kan inte ta mer än " + wantedOwnership + "och preocetenheter måste störe än noll");
+            //bedömning de ändrade aktierna är mindra wantedOwnership och större än 1
+            if (correctOwnership > wantedOwnership || correctOwnership < 1) {
+                System.out.println(ANSI_RED + "du kan inte ta mer än " + wantedOwnership + " och preocetenheter måste störe än noll" + ANSI_RESET);
                 continue;
             }
-            // 判断 如果是给出股份，给出的股份必须小于当前股份
+            // bestäm om den faktiska parametern är ägare eller anställd, om ägare,
+            // man behöver see till de aktier som vill flyttas är mindra de aktier som redan finns
             if (!giveOwnership && correctOwnership >= array[index - 1]) {
-                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1] - 1) + "procentenheter från ägare");
+                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1] - 1) + " procentenheter från ägare");
                 continue;
             }
+
             index--;
+
             if (giveOwnership) {
                 array[index] += correctOwnership;
             } else {
@@ -134,11 +160,11 @@ public class Labb1Company {
                 System.out.println("Det är " + wantedOwnership + " procentenheter som behöver " + giveOrTake + ".");
                 continue;
             }
-            System.out.println(Arrays.toString(array));
             return array;
         }
     }
 
+    //lägger till ägare eller anställad
     public static int[] addNew(int[] array, String elementParam) {
         if (elementParam.equalsIgnoreCase("anställd")) {
             int salary;
@@ -174,7 +200,7 @@ public class Labb1Company {
         }
     }
 
-    // 主目录的打印功能
+    // skriv ut sammanställning
     public static void printSummary(int[] ownerArray, int[] employeesArray) {
         int totalOwnership = 0;
         for (int i = 0; i < ownerArray.length; i++) {
@@ -190,6 +216,7 @@ public class Labb1Company {
         System.out.println("Totala timkostnad anställda: " + totalHourSalaries + " Kr/timme");
     }
 
+    //skriv ut info av ägare eller anställd
     public static void printAll(int[] array, String element) {
         if (array.length == 0) {
             System.out.println("Det finns inga " + element + " inlagda");
@@ -202,10 +229,11 @@ public class Labb1Company {
             printPrefix = "kr/h";
         }
         for (int i = 0; i < array.length; i++) {
-            System.out.println(element + " " + (i + 1) + ": " + array[i] + printPrefix);
+            System.out.println(ANSI_GREEN + " " + (i + 1) + ": " + array[i] + printPrefix + ANSI_RESET);
         }
     }
 
+    // ta bort ägare eller anställd
     public static int[] remove(int[] array, String elementParam) {
         if (elementParam.equalsIgnoreCase("ägare") && array.length == 1) {
             System.out.println("Du kan inte ta bort den enda ägaren i företaget");
@@ -227,9 +255,9 @@ public class Labb1Company {
         int[] newArray = new int[array.length - 1];
         for (int i = 0, j = 0; i < array.length; i++) {
             if (i == inputNumber) {
-                continue; // 跳过要删除的元素
+                continue;
             }
-            newArray[j++] = array[i]; // 将元素复制到新数组
+            newArray[j++] = array[i];
         }
         if (!elementParam.equalsIgnoreCase("ägare")) {
             return newArray;
@@ -237,6 +265,7 @@ public class Labb1Company {
         return correctOwnership(newArray, array[inputNumber], true);
     }
 
+    // ändra ägare
     public static int[] change(int[] array, String elementParam) {
         int inputNumber;
         boolean giveAway;
@@ -290,9 +319,9 @@ public class Labb1Company {
         int[] tempArr = new int[array.length - 1];
         for (int i = 0, j = 0; i < array.length; i++) {
             if (i == inputNumber) {
-                continue; // 跳过要删除的元素
+                continue;
             }
-            tempArr[j++] = array[i]; // 将元素复制到新数组
+            tempArr[j++] = array[i];
         }
         correctOwnership(tempArr, ownership, giveAway);
         for (int i = 0, j = 0; i < array.length; i++) {
@@ -304,40 +333,54 @@ public class Labb1Company {
         }
         return array;
     }
+
+    //subMeny
     public static int[] subChoice(int[] arrayParam, String elementParam) {
         while (true) {
             // 打印菜单选项
-            System.out.println("Vad vill du göra med " + elementParam + "?");
+            System.out.println(ANSI_GREEN + "Vad vill du göra med " + elementParam + "?");
+            System.out.println("================================================================");
             System.out.println("1. Visa alla " + elementParam + ".");
             System.out.println("2. Lägg till en ny " + elementParam + ".");
             System.out.println("3. Ändra en " + elementParam + ".");
             System.out.println("4. Ta bort en " + elementParam + ".");
             System.out.println("0. Gå tillbaka till huvudmenyn.");
-            System.out.print("Ange siffran för menyval > ");
+            System.out.print("Ange siffran för menyval > " + ANSI_RESET);
 
             // 获取用户的选择
             int menuSubChoice = Integer.parseInt(sc.nextLine());
-
             // 根据选择调用相应的方法
             switch (menuSubChoice) {
-                case 1: // 显示所有者或员工
+                case 1: // visa ägare eller anställd
+                    System.out.println("=========");
                     printAll(arrayParam, elementParam);
+                    System.out.println("=========");
                     break;
-                case 2: // 添加新所有者或员工
+                case 2: // lägger till ägare eller anställd
                     arrayParam = addNew(arrayParam, elementParam);
                     break;
-                case 3: // 修改所有者或员工
+                case 3: // ändra ägare eller anställd
                     arrayParam = change(arrayParam, elementParam);
                     break;
-                case 4: // 删除所有者或员工
+                case 4: // ta bort
                     arrayParam = remove(arrayParam, elementParam);
                     break;
-                case 0: // 返回主菜单
-                    return arrayParam; // 返回修改后的数组
+                case 0: // återgå till huvudmenyn
+                    return arrayParam;
                 default:
                     System.out.println("Ogiltigt val. Försök igen...");
             }
         }
+    }
+
+    public static void egg() {
+        System.out.println("Tack för besöket! ");
+        System.out.println("  *****  ");
+        System.out.println(" *     * ");
+        System.out.println("*  O O  *");
+        System.out.println("*   ^   *");
+        System.out.println(" * '-' * ");
+        System.out.println("  *****  ");
     }
 }
 
