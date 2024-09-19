@@ -12,6 +12,8 @@ import java.util.Scanner;
  * Använda samlingar för att göra hanteringen mer bekväm.
  * Använda objektorienterad programmering.
  * Förbättra metodanvändningen för att öka programmets effektivitet.
+ * Modifieringsfunktionen är inte tillräckligt perfekt. Till exempel kan en aktieägares aktier ändras till 0.
+ * Om det ändrade beloppet överstiger det maximala antalet aktieägare och de övriga aktieägarna är 1, kan programmet inte fortsätta.
  * @since 2024-09-19
  */
 
@@ -117,7 +119,7 @@ class Labb1Company {
 
         String giveOrTake = giveOwnership ? "fördelas ut" : "tas fram";
         String infoGiverOrTake = giveOwnership ? "ge till" : "ta ifrån";
-        System.out.println("Det är " + wantedOwnership + "procentenheter som behöver" + giveOrTake + ".");
+        System.out.println("Det är " + wantedOwnership + " procentenheter som behöver " + giveOrTake + ".");
         System.out.println(giveOwnership ? "vilken ägare vill du ge ägarandelar till ?" : "vilken ägare vill du ta ägarandelar av ? ");
         for (int i = 0; i < array.length; i++) {//show every owner ownership
             System.out.println("ägare" + (i + 1) + ":" + array[i] + "%");
@@ -137,14 +139,14 @@ class Labb1Company {
             System.out.println("Hur många preocetenheter vill du " + giveOrTake + " ägare " + index + "?");
             int correctOwnership = Integer.parseInt(sc.nextLine());
             //bedömning de ändrade aktierna är mindra wantedOwnership och större än 1
-            if (correctOwnership > wantedOwnership || correctOwnership < 1) {
+            if (correctOwnership > wantedOwnership || correctOwnership <= 0) {
                 System.out.println(ANSI_RED + "du kan inte ta mer än " + wantedOwnership + " och preocetenheter måste störe än noll" + ANSI_RESET);
                 continue;
             }
             // bestäm om den faktiska parametern är ägare eller anställd, om ägare,
             // man behöver see till de aktier som vill flyttas är mindra de aktier som redan finns
             if (!giveOwnership && correctOwnership >= array[index - 1]) {
-                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1] - 1) + " procentenheter från ägare");
+                System.out.println("du kan endast ta " + (array[index - 1] - 1) + " procentenheter från ägare");
                 continue;
             }
 
@@ -270,7 +272,7 @@ class Labb1Company {
         int inputNumber;
         boolean giveAway;
         while (true) {
-            System.out.println("Vilken" + elementParam + "vill du ändra på");
+            System.out.println("Vilken" + elementParam + " vill du ändra på");
             printAll(array, elementParam);
 
             System.out.println("Ange siffran på den du vill ändra på >");
@@ -300,8 +302,12 @@ class Labb1Company {
         while (true) {
             System.out.println("Ange ägarens nys ägarandel > ");
             ownership = Integer.parseInt(sc.nextLine());
-            if (ownership < 0 || ownership > 100) {
+            if (ownership <= 0 || ownership > 100) {
                 System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och imndre än 100%");
+                continue;
+            }
+            if (ownership <= array[inputNumber] && array[inputNumber] <= 1) {
+                System.out.println("Ägaren har endast 1 % av aktierna och kan inte ge bort dem");
                 continue;
             }
             break;
