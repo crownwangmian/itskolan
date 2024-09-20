@@ -117,7 +117,7 @@ class Labb1Company {
 
         String giveOrTake = giveOwnership ? "fördelas ut" : "tas fram";
         String infoGiverOrTake = giveOwnership ? "ge till" : "ta ifrån";
-        System.out.println("Det är " + wantedOwnership + "procentenheter som behöver" + giveOrTake + ".");
+        System.out.println("Det är " + wantedOwnership + " procentenheter som behöver " + giveOrTake + ".");
         System.out.println(giveOwnership ? "vilken ägare vill du ge ägarandelar till ?" : "vilken ägare vill du ta ägarandelar av ? ");
         for (int i = 0; i < array.length; i++) {//show every owner ownership
             System.out.println("ägare" + (i + 1) + ":" + array[i] + "%");
@@ -251,7 +251,6 @@ class Labb1Company {
             }
             break;
         } while (true);
-
         int[] newArray = new int[array.length - 1];
         for (int i = 0, j = 0; i < array.length; i++) {
             if (i == inputNumber) {
@@ -337,7 +336,6 @@ class Labb1Company {
     //subMeny
     public static int[] subChoice(int[] arrayParam, String elementParam) {
         while (true) {
-            // 打印菜单选项
             System.out.println(ANSI_GREEN + "Vad vill du göra med " + elementParam + "?");
             System.out.println("================================================================");
             System.out.println("1. Visa alla " + elementParam + ".");
@@ -346,10 +344,7 @@ class Labb1Company {
             System.out.println("4. Ta bort en " + elementParam + ".");
             System.out.println("0. Gå tillbaka till huvudmenyn.");
             System.out.print("Ange siffran för menyval > " + ANSI_RESET);
-
-            // 获取用户的选择
             int menuSubChoice = Integer.parseInt(sc.nextLine());
-            // 根据选择调用相应的方法
             switch (menuSubChoice) {
                 case 1: // visa ägare eller anställd
                     System.out.println("=========");
