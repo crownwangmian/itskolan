@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Använda samlingar för att göra hanteringen mer bekväm.
  * Använda objektorienterad programmering.
  * Förbättra metodanvändningen för att öka programmets effektivitet.
- * @since 2024-09-20
+ * @since 2024-09-21
  */
 
 class Labb1Company {
