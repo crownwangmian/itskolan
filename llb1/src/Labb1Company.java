@@ -42,38 +42,48 @@ class Labb1Company {
         }
         int numberOfOwner;
         // avgör hur många ägare som ska finnas
+        int[] owner = null;
+
+        flag:
         while (true) {
-            System.out.println("Antal ägare?");
-            numberOfOwner = Integer.parseInt(sc.nextLine());
-            if (!(numberOfOwner > 0)) {
-                System.out.println(ANSI_RED + "Det måste finnas minst en ägare" + ANSI_RESET);
-                continue;
-            }
-            break;
-        }
-        // skapar ägare array
-        int[] owner = new int[numberOfOwner];
-        // skapar index
-        int index = 0;
-        //skapar totalOwnerPercentage
-        int totalOwnerPercentage = 0;
-        // skriva in ownership
-        if (owner.length == 1) {
-            owner[0] = 100;
-            System.out.println(ANSI_RED + "ägare 1 ägarandel 100" + ANSI_RESET);
-        } else {
-            while (index < owner.length - 1) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
-                System.out.println("ange ägare" + (index + 1) + " ägarandel");
-                int ownerPercentage = Integer.parseInt(sc.nextLine());
-                if (!(ownerPercentage > 0)) {
-                    System.out.println("en ägare måste äga något...");
+            while (true) {
+                System.out.println("Antal ägare?");
+                numberOfOwner = Integer.parseInt(sc.nextLine());
+                if (!(numberOfOwner > 0)) {
+                    System.out.println(ANSI_RED + "Det måste finnas minst en ägare" + ANSI_RESET);
                     continue;
                 }
-                owner[index] = ownerPercentage; // tilldeal ownership
-                totalOwnerPercentage += ownerPercentage; // räknar total ownership
-                index++;
+                break;
             }
-            owner[index] = 100 - totalOwnerPercentage; // räknar den sista ownership
+            // skapar ägare array
+            owner = new int[numberOfOwner];
+            // skapar index
+            int index = 0;
+            //skapar totalOwnerPercentage
+            int totalOwnerPercentage = 0;
+            // skriva in ownership
+            if (owner.length == 1) {
+                owner[0] = 100; //
+                System.out.println(ANSI_RED + "ägare 1 ägarandel 100" + ANSI_RESET);
+            } else {
+                while (index < owner.length - 1) { // för räknar den sista ägare ownership automatiskt,owner.length måste minska 1
+                    System.out.println("ange ägare" + (index + 1) + " ägarandel");
+                    int ownerPercentage = Integer.parseInt(sc.nextLine());
+                    if (!(ownerPercentage > 0)) {
+                        System.out.println("en ägare måste äga något...");
+                        continue;
+                    }
+                    owner[index] = ownerPercentage; // tilldeal ownership
+                    totalOwnerPercentage += ownerPercentage; // räknar total ownership
+                    if (totalOwnerPercentage > 100) {
+                        System.out.println("ownership är över 100, du måste göra igen");
+                        continue flag;
+                    }
+                    index++;
+                }
+                owner[index] = 100 - totalOwnerPercentage; // räknar den sista ownership
+            }
+            break flag;
         }
         System.out.println("=======");
         printAll(owner, "ägare");
