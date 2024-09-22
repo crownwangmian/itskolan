@@ -4,7 +4,8 @@ import java.util.Scanner;
 /**
  * @author Mian Wang
  * @version 4.1
- * @Versionförändringar 1.Koden är logiskt korrekt och fungerar som förväntat.
+ * @Versionförändringar
+ * 1.Koden är logiskt korrekt och fungerar som förväntat.
  * 2.Färg och format har lagts till.
  * @Nästa versionsförbättringar:
  * Lägga till funktioner, såsom automatisk beräkning av vinst.
